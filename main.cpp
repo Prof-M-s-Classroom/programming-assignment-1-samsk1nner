@@ -13,13 +13,13 @@ int main() {
 
     SpaceRoute<string> voyagerRoute;
 
-    voyagerRoute.addWaypointAtEnd(mars);
-    voyagerRoute.addWaypointAtEnd(jupiter);
-    voyagerRoute.addWaypointAtEnd(saturn);
-    voyagerRoute.addWaypointAtBeginning(earth);
-    voyagerRoute.addWaypointAtIndex(2, venus);
+    voyagerRoute.addWaypointAtEnd(mars); // Now getting infinite list.
+    voyagerRoute.addWaypointAtEnd(jupiter); // Using breakpoint: we see t0x600002c19220 instead of Mars. Fix needed.
+    voyagerRoute.addWaypointAtEnd(saturn); // Fix: instead of data, we use node as node is indicative of a singular item in a list.
+    // voyagerRoute.addWaypointAtBeginning(earth);
+    // voyagerRoute.addWaypointAtIndex(2, venus);
 
-    cout << "Voyager Route (Forward):\n";
+    cout << "Voyager Route (Forward):\n"; // not printing the traverse forward, cutting off rest of program.
     voyagerRoute.traverseForward();
 
     cout << "\nVoyager Route (Backward):\n";
