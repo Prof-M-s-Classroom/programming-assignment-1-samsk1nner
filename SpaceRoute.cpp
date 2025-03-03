@@ -8,7 +8,6 @@ public:
     T& data;
     Node* next;
     Node* prev;
-    int length; // added
 
     Node(T& d) : data(d), next(nullptr), prev(nullptr) {}
     void print() { cout << data << " "; }
@@ -53,11 +52,11 @@ public:
     void addWaypointAtBeginning(T& data) { // O(1) runtime; head created, new node is set to next, distance inc by 1
         Node<T> *newNode = new Node<T>(data);
         newNode->next = head;
-        head = newNode;
-        if (head == nullptr) {
+        newNode->prev = nullptr;
+        if (head != nullptr) {
             head -> prev = newNode;
         } else {
-            head -> next = newNode;
+            tail = newNode;
         }
         head = newNode;
         length++;
@@ -65,16 +64,16 @@ public:
     }
 
     void addWaypointAtEnd(T& data) { // new node at tail with pointer to prev and head (make circular)
-        Node<T> *newNode = new Node<T>(data);
-        newNode->prev = tail;
-
-        tail = newNode;
+        Node<T>* newNode = new Node<T>(data);
+        newNode->next = nullptr;
         if (tail != nullptr) {
+            newNode->prev = tail;
             tail -> next = newNode;
+            tail = newNode;
         } else {
             head = newNode;
+            tail = newNode;
         }
-        tail = newNode;
         length++;
         cout << "Adding waypoint at " << data << ", Voyager 210's current planet."<< endl;
     }
@@ -86,29 +85,32 @@ public:
         if (index == 0) {
             addWaypointAtBeginning(data);
             cout << "Mission has kicked off. We have begun at " << data << endl; // possible change: does data represent the planet (node)?
+            return;
         }
         if (index == length) {
             addWaypointAtEnd(data);
             cout << "We have landed on " << data << ", the furthest planet in celestial waypoint in the mission's journey." << endl; // same question as above.
+            return;
         }
         Node<T>* newNode = new Node<T>(data);
         Node<T>* current = head;
         for (int i = 0; i < index -1; i++) {
             current = current->next;
         }
-        newNode -> next = current->next;
-        newNode -> prev = current;
-        current -> next = newNode;
-        current -> prev = newNode;
-        cout << "Waypoint has been inserted into the journey at " << index << endl;
+        newNode-> next = current->next;
+        newNode-> prev = current;
+        current-> next-> prev = newNode;
+        current ->next = newNode;
+        cout << "Waypoint has been inserted into the journey at " << data << endl;
         length++;
     }
 
     void removeWaypointAtBeginning() { // remove head, make sure tail pointer allows for circular LL
         if (head == nullptr) {
             cout << "The journey has not begun." << endl;
+            return;
         }
-        Node<T> *temp = head;
+        Node<T>* temp = head;
         head = head -> next;
         if (head != nullptr) {
             head -> prev = nullptr;
@@ -125,7 +127,7 @@ public:
             cout << "There are no waypoints in the mission's journey." << endl;
             return;
         }
-        Node<T> *temp = tail;
+        Node<T>* temp = tail;
         tail = tail -> prev;
         if (tail != nullptr) {
             tail -> next = nullptr;
@@ -133,7 +135,7 @@ public:
             head = nullptr;
         }
         delete temp;
-        cout << "Removing waypoint at " << temp << endl;
+        // cout << "Removing waypoint at " << temp-> data << endl;
         length--;
     }
 
@@ -143,21 +145,21 @@ public:
         }
         if (index == 0) {
             removeWaypointAtBeginning();
+            return;
         }
-        else if (index == length - 1) {
+        if (index == length - 1) {
             removeWaypointAtEnd();
+            return;
         }
-        else {
-            Node<T> *current = head;
-            for (int i = 0; i < index; i++) { // O(n) runtime
-                current = current->next;
-            }
-            current -> prev -> next = current->next;
-            current -> next -> prev = current->prev;
-            cout << "Removing waypoint at " << current << endl;
-            delete current;
-            length--;
+        Node<T>* current = head;
+        for (int i = 0; i < index; i++) { // O(n) runtime
+            current = current->next;
         }
+        current -> prev -> next = current->next;
+        current -> next -> prev = current->prev;
+        cout << "Removing waypoint at " << current-> data << endl;
+        delete current;
+        length--;
     }
 
     void traverseForward() {
@@ -165,15 +167,11 @@ public:
             cout << "There are no waypoints. " << endl;
             return;
         }
-        else {
-            cout << "Overall mission from the start:" << endl;
-            Node<T> *curr = head;
-            while (curr != nullptr) {
-                cout << curr -> data << " ";
-                curr = curr -> next;
-            }
+        Node<T>* current = head;
+        while (current != nullptr) {
+            cout << current -> data << " ";
+            current = current -> next;
         }
-        cout << endl;
     }
 
     void traverseBackward() {
@@ -181,7 +179,7 @@ public:
             cout << "There are no waypoints. " << endl;
             return;
         }
-        Node<T> *current = tail;
+        Node<T>* current = tail;
         while (current != nullptr) {
             cout << current -> data << " ";
             current = current -> prev;
@@ -201,7 +199,7 @@ public:
     }
 
     void setWaypoint(int index, T& data) { // needs work
-        Node<T> *current = getWaypoint(index);
+        Node<T>* current = getWaypoint(index);
         if (current != nullptr) {
             current->data = data;
         }
@@ -216,4 +214,3 @@ public:
             cout << endl;
         }
 };
-

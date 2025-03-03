@@ -3,8 +3,6 @@
 Must include explanations of each method and how they work. 
 Then, for each method, calculate the Big O notation.
 
-
-
 Runtime:
 Constructor: SpaceRoute O(1)
     The runtime of the constructor is simply O(1) as it just initializes the pointers and length of the list, which is a constant
@@ -36,7 +34,7 @@ Function #4: removeWaypointAtBeginning O(1)
     is the pointer in which the tail node is pointing to. Same goes for the new head, which is head -> next. Essentially what this means
     is that the command team is removing the original start point.
 
-Function #5: removeWaypointAtEnd O(??)
+Function #5: removeWaypointAtEnd O(1)
     This function is similar to the previous function. The runtime is O(1) because we are just deleting the last node, or planet, 
     and setting the head prev pointer equal to the index of an element at tail - 1. This function allows for the command team to delete
     a waypoint from the end of their journey.
@@ -47,7 +45,7 @@ Function #6: removeWaypointAtIndex O(n)
     to remove specified stops along their trip.
 
 Function #7: traverseForward O(n)
-    The runtime of traverseForwad is O(?) because every planet in the list must be accessed and printed. The command team can use this operation
+    The runtime of traverseForwad is O(n) because every planet in the list must be accessed and printed. The command team can use this operation
     for viewing what their journey has looked like from the start to see how far they have come.
 
 Function #8: traverseBackward O(n)
